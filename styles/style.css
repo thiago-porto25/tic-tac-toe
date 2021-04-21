@@ -60,6 +60,11 @@ main {
   height: 100%;
 }
 
+.blurred {
+  filter: blur(4px);
+  -webkit-filter: blur(4px)
+}
+
 #gameModeBtnsDiv {
   display: flex;
   flex-direction: column;
@@ -100,7 +105,7 @@ main {
 }
 
 #resetBtnDiv {
-  display: none;
+  display: '';
 }
 
 #resetBtn {
@@ -244,10 +249,23 @@ main {
 }
 
 
+/*Winner Modal*/
+#winnerModal {
+  display: none;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.027);
+  font-size: 50px;
+  text-align: center;
+  line-height: 100px;
+  transition: 0.5s ease;
+}
 
 
-
-
+/*footer*/
 footer {
   margin-left: 1rem;
   color: rgb(156, 3, 3);
