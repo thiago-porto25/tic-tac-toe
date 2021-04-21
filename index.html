@@ -15,26 +15,57 @@
   <body>
     <main>
       <section id="init">
-
         <h1>Tic Tac Toe</h1>
         <button>New Game</button>
-
       </section>
-      <section id="modeBtnsAndBoard">
 
+      <section id="modalsContainer">
+        <div class="modal" id="modalAI">
+          <form>
+            <label>Player Name:</label><br><br>
+            <input class="inputName" id="playerNameAI" name="playerNameAI" type='text' maxlength="50" required><br><br>
+            <label>Who goes first:</label><br><br>
+            <input id="playerFirst" type="radio" name="first" required>
+            <span>Player</span><br>
+            <input id="AIFirst" type="radio" name="first" required>
+            <span>AI</span><br>
+            <button class="startGameBtn startAIGame" type="submit">Start Game</button>
+          </form>
+        </div>
+        <div class="modal" id="modalTwoPlayers">
+          <form>
+            <label>Player 1 Name:</label><br><br>
+            <input class="inputName" id="player1Name" name="player1Name" type='text' maxlength="50" required><br><br>
+            <label>Player 2 Name:</label><br><br>
+            <input class="inputName" id="player2Name" name="player2Name" type='text' maxlength="50" required><br><br>
+            <button class="startGameBtn startTwoPlayersGame" type="submit">Start Game</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="modeBtnsAndBoard">
         <div id="gameModeBtnsDiv">
           <div>
             <button id="buttonAI" class="modeBtns">AI Bot</button>
             <button id="buttonTwoPlayers" class="modeBtns">Two Players</button>
           </div>
+
           <div id ="resetBtnDiv">
             <button id="resetBtn" class="modeBtns">Reset</button>
           </div>
         </div>
+
         <div id="gameBoard">
-
+          <div class="boardSquare" id="square1"></div>
+          <div class="boardSquare" id="square2"></div>
+          <div class="boardSquare" id="square3"></div>
+          <div class="boardSquare" id="square4"></div>
+          <div class="boardSquare" id="square5"></div>
+          <div class="boardSquare" id="square6"></div>
+          <div class="boardSquare" id="square7"></div>
+          <div class="boardSquare" id="square8"></div>
+          <div class="boardSquare" id="square9"></div>
         </div>
-
       </section>
     </main>
     <footer>
