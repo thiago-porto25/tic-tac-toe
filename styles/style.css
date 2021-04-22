@@ -129,7 +129,6 @@ main {
 }
 
 .boardSquare {
-  display: flex;
   width: 7rem;
   height: 7rem;
   border: transparent;
@@ -140,6 +139,7 @@ main {
   font-size: 90px;
   text-align: center;
   transition: 0.2s ease;
+  text-align: center;
 }
 
 .twoPlayersBoard {
@@ -275,6 +275,7 @@ footer {
 
 footer p {
   margin-bottom: 0.5rem;
+  font-size: 13px;
 }
 
 footer a {
