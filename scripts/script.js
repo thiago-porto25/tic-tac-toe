@@ -16,6 +16,12 @@ const playerFactory = (name, symbol) => {
   return {name, makeMove, symbol}
 }
 
+const BoardItself = () => {
+  const board = ['','','',
+                 '','','',
+                 '','','']
+}
+
 const renderHandler = (function(){
   const _modeBtnsAndBoard = document.querySelector('#modeBtnsAndBoard')
   const _buttonAI = _modeBtnsAndBoard.querySelector('#buttonAI')
