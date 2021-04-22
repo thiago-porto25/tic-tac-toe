@@ -39,7 +39,7 @@ main {
   border: transparent;
   border-radius: 4px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.1s;
   outline: none;
 }
 
