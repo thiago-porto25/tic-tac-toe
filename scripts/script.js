@@ -9,6 +9,7 @@ const init = (function () {
   _newGameBtn.addEventListener('click', _removeInitModal)
 })()
 
+
 const playerFactory = (name, symbol) => {
   const makeMove = () => {
     this.textContent = symbol
@@ -16,11 +17,14 @@ const playerFactory = (name, symbol) => {
   return {name, makeMove, symbol}
 }
 
-const BoardItself = () => {
+
+const boardItself = (function(){
   const board = ['','','',
                  '','','',
                  '','','']
-}
+  return {board}
+})()
+
 
 const renderHandler = (function(){
   const _modeBtnsAndBoard = document.querySelector('#modeBtnsAndBoard')
@@ -96,6 +100,7 @@ const renderHandler = (function(){
   }
 })()
 
+
 const gameBoardHandler = (function(){
   const modalAI = renderHandler.modalAI
   const modalTwoPlayers = renderHandler.modalTwoPlayers
@@ -159,8 +164,7 @@ const gameBoardHandler = (function(){
   }
 
   formAI.addEventListener('submit', _preventRefresh)
-  let AIGame = formAI.addEventListener('submit', submitAndStartAIGame)
-  console.log(AIGame)
+  formAI.addEventListener('submit', submitAndStartAIGame)
   formTwoPlayers.addEventListener('submit', _preventRefresh)
   formTwoPlayers.addEventListener('submit', submitAndStartTwoPlayersGame)
 })()
