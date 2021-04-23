@@ -31,12 +31,13 @@ const renderHandler = (function(){
   const _buttonAI = _modeBtnsAndBoard.querySelector('#buttonAI')
   const _buttonTwoPlayers = _modeBtnsAndBoard.querySelector('#buttonTwoPlayers')
   const _resetBtnDiv = _modeBtnsAndBoard.querySelector('#resetBtnDiv')
-  const _resetBtn = _modeBtnsAndBoard.querySelector('#resetBtn')
+  const resetBtn = _modeBtnsAndBoard.querySelector('#resetBtn')
   //selecting modals
   const _modalsContainer = document.querySelector('#modalsContainer')
   const modalAI = _modalsContainer.querySelector('#modalAI')
   const modalTwoPlayers = _modalsContainer.querySelector('#modalTwoPlayers')
   const winnerModal = _modalsContainer.querySelector('#winnerModal')
+  const _winnerText = winnerModal.querySelector('p')
   //selecting renderBoard
   const _gameBoard = document.querySelector('#gameBoard')
   const boardSquares = _gameBoard.querySelectorAll('.boardSquare')
@@ -53,9 +54,14 @@ const renderHandler = (function(){
     _modalsContainer.style.display = 'flex'
     modalTwoPlayers.style.display = 'flex'
   }
-  const renderWinnerModal = () => {
+  const renderWinnerModal = (winner) => {
     _modalsContainer.style.display = 'flex'
     winnerModal.style.display = 'flex'
+    if(winner === ''){
+      _winnerText.textContent = 'It\'s a Tie!'
+    } else {
+      _winnerText.textContent = `${winner} is the Winner!`
+    }
   }
   const renderResetButton = () => {
     _resetBtnDiv.style.display = 'flex'
@@ -86,7 +92,7 @@ const renderHandler = (function(){
 
   _buttonAI.addEventListener('click', _renderAIModal)
   _buttonTwoPlayers.addEventListener('click', _renderTwoPlayersModal)
-  _resetBtn.addEventListener('click', resetBoard)
+  resetBtn.addEventListener('click', resetBoard)
 
   return {
     renderChooseMode,
@@ -96,7 +102,8 @@ const renderHandler = (function(){
     modalAI,
     modalTwoPlayers,
     winnerModal,
-    boardSquares
+    boardSquares,
+    resetBtn
   }
 })()
 
@@ -104,6 +111,7 @@ const renderHandler = (function(){
 const gameBoardHandler = (function(){
   const modalAI = renderHandler.modalAI
   const modalTwoPlayers = renderHandler.modalTwoPlayers
+  let resetBtn = renderHandler.resetBtn
   //selecting inputs and buttons from Two Players Modal
   const _player1NameInput = modalTwoPlayers.querySelector('#player1Name')
   const _player2NameInput = modalTwoPlayers.querySelector('#player2Name')
@@ -115,11 +123,36 @@ const gameBoardHandler = (function(){
   const formAI = document.querySelector('#formAI')
   const formTwoPlayers = document.querySelector('#formTwoPlayers')
 
-  const runGame = (player1, player2) => {
-    const _squares = renderHandler.boardSquares
+  const runGame = (player1, player2, _squares, _reset) => {
+    if(_squares === undefined){
+    _squares = renderHandler.boardSquares
+    } if (_reset !== undefined){
+      resetBtn = _reset
+    }
+    let _turn = 'player1'
+
     _squares.forEach(square => square.addEventListener('click', (e) => {
+      if(_turn === 'player1'){
       e.target.textContent = player1.symbol
+      const _squareIndex = e.target.getAttribute('data-index')
+      console.log(_squareIndex)
+      _turn = 'player2'
+      } else if(_turn === 'player2'){
+        e.target.textContent = player2.symbol
+        const _squareIndex = e.target.getAttribute('data-index')
+        console.log(_squareIndex)
+        _turn = 'player1'
+      }
     }))
+    //when the reset button is clicked
+    resetBtn.addEventListener('click', () => {
+      _turn = 'player1'
+      const _newSquares = []
+      const _newReset = resetBtn.cloneNode(true)
+      _squares.forEach(square => _newSquares.push(square.cloneNode(true)))
+      console.log(_newSquares)
+      runGame(player1, player2, _newSquares, _newReset)
+    })
   }
   const submitAndStartAIGame = () => {
     const _playerName = _playerNameAIInput.value
