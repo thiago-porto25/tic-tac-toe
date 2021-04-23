@@ -135,7 +135,9 @@ const gameBoardHandler = (function(){
   const runGame = (player1, player2, _squares, _reset) => {
     if(_squares === undefined){
     _squares = renderHandler.boardSquares
-    } if (_reset !== undefined){
+    } 
+    
+    if (_reset !== undefined){
       resetBtn = _reset
     }
     let _turn = 'player1'
@@ -143,14 +145,18 @@ const gameBoardHandler = (function(){
     _squares.forEach(square => square.addEventListener('click', (e) => {
       if(_turn === 'player1'){
       e.target.textContent = player1.symbol
+
       const _squareIndex = e.target.getAttribute('data-index')
       boardItself.board.splice(_squareIndex, 1, player1.symbol)
+      
       console.log(boardItself.board)
       _turn = 'player2'
       } else if(_turn === 'player2'){
         e.target.textContent = player2.symbol
+
         const _squareIndex = e.target.getAttribute('data-index')
         boardItself.board.splice(_squareIndex, 1, player2.symbol)
+        
         console.log(boardItself.board)
         _turn = 'player1'
       }
