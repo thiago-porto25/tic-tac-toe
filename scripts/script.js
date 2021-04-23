@@ -19,10 +19,18 @@ const playerFactory = (name, symbol) => {
 
 
 const boardItself = (function(){
-  const board = ['','','',
-                 '','','',
-                 '','','']
-  return {board}
+  let board = ['','','',
+              '','','',
+              '','','']
+  const resetBoard = () => {
+    boardItself.board = ['','','',
+                         '','','',
+                         '','','']
+  }
+  return {
+    resetBoard,
+    board
+  }
 })()
 
 
@@ -80,6 +88,7 @@ const renderHandler = (function(){
   }
   const resetBoard = () => {
     boardSquares.forEach(square => square.textContent = '')
+    boardItself.resetBoard()
   }
   const renderBoard = (mode) => {
     _gameBoard.style.display = 'flex'
@@ -135,12 +144,14 @@ const gameBoardHandler = (function(){
       if(_turn === 'player1'){
       e.target.textContent = player1.symbol
       const _squareIndex = e.target.getAttribute('data-index')
-      console.log(_squareIndex)
+      boardItself.board.splice(_squareIndex, 1, player1.symbol)
+      console.log(boardItself.board)
       _turn = 'player2'
       } else if(_turn === 'player2'){
         e.target.textContent = player2.symbol
         const _squareIndex = e.target.getAttribute('data-index')
-        console.log(_squareIndex)
+        boardItself.board.splice(_squareIndex, 1, player2.symbol)
+        console.log(boardItself.board)
         _turn = 'player1'
       }
     }))
