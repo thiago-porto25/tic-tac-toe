@@ -144,21 +144,27 @@ const gameBoardHandler = (function(){
 
     _squares.forEach(square => square.addEventListener('click', (e) => {
       if(_turn === 'player1'){
-      e.target.textContent = player1.symbol
+        if(e.target.textContent === player1.symbol || e.target.textContent === player2.symbol) return
+        else {
+          e.target.textContent = player1.symbol
 
-      const _squareIndex = e.target.getAttribute('data-index')
-      boardItself.board.splice(_squareIndex, 1, player1.symbol)
+          const _squareIndex = e.target.getAttribute('data-index')
+          boardItself.board.splice(_squareIndex, 1, player1.symbol)
       
-      console.log(boardItself.board)
-      _turn = 'player2'
+          console.log(boardItself.board)
+          _turn = 'player2'
+        }
       } else if(_turn === 'player2'){
-        e.target.textContent = player2.symbol
+          if(e.target.textContent === player1.symbol || e.target.textContent === player2.symbol) return
+          else {
+            e.target.textContent = player2.symbol
 
-        const _squareIndex = e.target.getAttribute('data-index')
-        boardItself.board.splice(_squareIndex, 1, player2.symbol)
-        
-        console.log(boardItself.board)
-        _turn = 'player1'
+            const _squareIndex = e.target.getAttribute('data-index')
+            boardItself.board.splice(_squareIndex, 1, player2.symbol)
+
+            console.log(boardItself.board)
+            _turn = 'player1'
+          }
       }
     }))
     //when the reset button is clicked
