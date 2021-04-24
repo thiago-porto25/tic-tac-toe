@@ -110,7 +110,8 @@ main {
 
 #resetBtn {
   margin-top: 30px;
-  background: linear-gradient(45deg, rgb(204, 2, 2), rgb(3, 3, 194))
+  background: linear-gradient(45deg, rgb(204, 2, 2), rgb(3, 3, 194));
+  transition: 0.3s;
 }
 
 #resetBtn:hover {
@@ -138,7 +139,7 @@ main {
   font-weight: bolder;
   font-size: 90px;
   text-align: center;
-  transition: 0.2s ease;
+  transition: 0.1s;
   text-align: center;
 }
 
@@ -146,8 +147,16 @@ main {
   background: linear-gradient(45deg, rgb(0, 0, 56), rgb(3, 3, 194));
 }
 
+.twoPlayersBoard:hover {
+  box-shadow: 0px 0px 16px rgb(99, 99, 231);
+}
+
 .AIBoard {
   background: linear-gradient(45deg, rgb(66, 0, 0), rgb(204, 2, 2));
+}
+
+.AIBoard:hover {
+  box-shadow: 0px 0px 16px rgb(231, 99, 99);
 }
 
 
@@ -203,7 +212,7 @@ main {
 
 /* Modals Inputs */
 .inputName {
-  width: 95%;
+  width: 101%;
   height: 1.5rem;
   border-radius: 8px;
   border: 1px white;
