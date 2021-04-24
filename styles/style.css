@@ -25,7 +25,7 @@ main {
 
 #init h1 {
   font-size: 60px;
-  color: rgb(180, 3, 3);
+  color: rgb(158, 1, 1);
   text-shadow: 5px 5px 0px rgb(2, 2, 173);
 }
 
@@ -44,8 +44,8 @@ main {
 }
 
 #init button:hover {
-  background: linear-gradient(45deg, rgb(204, 2, 2),rgb(3, 3, 194));
-  box-shadow: 0px 0px 10px rgb(204, 2, 2);
+  background: linear-gradient(45deg, rgb(202, 14, 14),rgb(3, 3, 194));
+  box-shadow: 0px 0px 8px rgb(204, 2, 2);
 }
 
 
@@ -275,11 +275,12 @@ main {
   background: rgba(255, 255, 255, 0.027);
   transition: 0.5s ease;
 }
+
 #winnerModal p {
-  font-size: 50px;
+  font-size: 60px;
   text-align: center;
   line-height: 100px;
-  background: -webkit-linear-gradient(rgb(255, 0, 0), rgb(0, 0, 255));
+  background: -webkit-linear-gradient(rgb(245, 61, 61), rgb(67, 67, 255));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke-width: 2px;
