@@ -11,24 +11,59 @@ const init = (function () {
 
 
 const playerFactory = (name, symbol) => {
-  const makeMove = () => {
-    this.textContent = symbol
-  }
-  return {name, makeMove, symbol}
+  return {name, symbol}
 }
 
 
 const boardItself = (function(){
   let board = ['','','',
-              '','','',
-              '','','']
+               '','','',
+               '','','']
   const resetBoard = () => {
     boardItself.board = ['','','',
                          '','','',
                          '','','']
   }
+  const checkWinner = (player) => {
+    if(boardItself.board[0] === player.symbol &&
+      boardItself.board[3] === player.symbol &&
+      boardItself.board[6] === player.symbol) return true
+
+    else if(boardItself.board[1] === player.symbol &&
+          boardItself.board[4] === player.symbol &&
+          boardItself.board[7] === player.symbol) return true
+    
+    else if(boardItself.board[2] === player.symbol &&
+          boardItself.board[5] === player.symbol &&
+          boardItself.board[8] === player.symbol) return true
+
+    else if(boardItself.board[0] === player.symbol &&
+          boardItself.board[1] === player.symbol &&
+          boardItself.board[2] === player.symbol) return true
+
+    else if(boardItself.board[3] === player.symbol &&
+          boardItself.board[4] === player.symbol &&
+          boardItself.board[5] === player.symbol) return true
+
+    else if(boardItself.board[6] === player.symbol &&
+          boardItself.board[7] === player.symbol &&
+          boardItself.board[8] === player.symbol) return true
+
+    else if(boardItself.board[0] === player.symbol &&
+          boardItself.board[4] === player.symbol &&
+          boardItself.board[8] === player.symbol) return true
+    
+    else if(boardItself.board[2] === player.symbol &&
+          boardItself.board[4] === player.symbol &&
+          boardItself.board[6] === player.symbol) return true
+  }
+  const checkTie = (turns) => {
+    if(turns === 8) return true
+  }
   return {
     resetBoard,
+    checkWinner,
+    checkTie,
     board
   }
 })()
@@ -40,6 +75,7 @@ const renderHandler = (function(){
   const _buttonTwoPlayers = _modeBtnsAndBoard.querySelector('#buttonTwoPlayers')
   const _resetBtnDiv = _modeBtnsAndBoard.querySelector('#resetBtnDiv')
   const resetBtn = _modeBtnsAndBoard.querySelector('#resetBtn')
+  const _footer = document.querySelector('footer')
   //selecting modals
   const _modalsContainer = document.querySelector('#modalsContainer')
   const modalAI = _modalsContainer.querySelector('#modalAI')
@@ -50,7 +86,11 @@ const renderHandler = (function(){
   const _gameBoard = document.querySelector('#gameBoard')
   const boardSquares = _gameBoard.querySelectorAll('.boardSquare')
   
-
+  
+  const changeResetText = (type) => {
+    if(type === 'New Game') resetBtn.textContent = 'New Game'
+    else if (type === 'Reset') resetBtn.textContent = 'Reset'
+  }
   const renderChooseMode = () => {
     _modeBtnsAndBoard.style.display = 'flex'
   }
@@ -62,14 +102,30 @@ const renderHandler = (function(){
     _modalsContainer.style.display = 'flex'
     modalTwoPlayers.style.display = 'flex'
   }
+  const _blurBackground = () => {
+    _modeBtnsAndBoard.setAttribute('class', 'blurred')
+    _footer.setAttribute('class', 'blurred')
+  }
+  const _unblurBackground = () => {
+    _modeBtnsAndBoard.setAttribute('class', '')
+    _footer.setAttribute('class', '')
+  }
+  const closeWinnerModal = () => {
+    _unblurBackground()
+    _modalsContainer.style.display = 'none'
+    winnerModal.style.display = 'none'
+    changeResetText('New Game')
+  }
   const renderWinnerModal = (winner) => {
+    _blurBackground()
     _modalsContainer.style.display = 'flex'
     winnerModal.style.display = 'flex'
-    if(winner === ''){
+    if(winner === undefined){
       _winnerText.textContent = 'It\'s a Tie!'
     } else {
-      _winnerText.textContent = `${winner} is the Winner!`
+      _winnerText.textContent = `${winner.name} is the Winner!`
     }
+    setTimeout(closeWinnerModal, 4000)
   }
   const renderResetButton = () => {
     _resetBtnDiv.style.display = 'flex'
@@ -82,11 +138,8 @@ const renderHandler = (function(){
     _modalsContainer.style.display = 'none'
     modalTwoPlayers.style.display = 'none'
   }
-  const closeWinnerModal = () => {
-    _modalsContainer.style.display = 'none'
-    winnerModal.style.display = 'none'
-  }
   const resetBoard = () => {
+    changeResetText('Reset')
     boardSquares.forEach(square => square.textContent = '')
     boardItself.resetBoard()
   }
@@ -132,6 +185,7 @@ const gameBoardHandler = (function(){
   const formAI = document.querySelector('#formAI')
   const formTwoPlayers = document.querySelector('#formTwoPlayers')
 
+
   const runGame = (player1, player2, _squares, _reset) => {
     if(_squares === undefined){
     _squares = renderHandler.boardSquares
@@ -141,35 +195,51 @@ const gameBoardHandler = (function(){
       resetBtn = _reset
     }
     let _turn = 'player1'
+    let _gameEnd = false
+    let _turnNumber = 0
 
     _squares.forEach(square => square.addEventListener('click', (e) => {
       if(_turn === 'player1'){
-        if(e.target.textContent === player1.symbol || e.target.textContent === player2.symbol) return
+        if(e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
         else {
           e.target.textContent = player1.symbol
 
           const _squareIndex = e.target.getAttribute('data-index')
           boardItself.board.splice(_squareIndex, 1, player1.symbol)
-      
-          console.log(boardItself.board)
-          _turn = 'player2'
+
+          if(boardItself.checkWinner(player1)){
+            renderHandler.renderWinnerModal(player1)
+            _gameEnd = true
+          } else if(boardItself.checkTie(_turnNumber)) {
+            renderHandler.renderWinnerModal(undefined)
+          }
+          else _turn = 'player2'
+          _turnNumber += 1
         }
       } else if(_turn === 'player2'){
-          if(e.target.textContent === player1.symbol || e.target.textContent === player2.symbol) return
+          if(e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
           else {
             e.target.textContent = player2.symbol
 
             const _squareIndex = e.target.getAttribute('data-index')
             boardItself.board.splice(_squareIndex, 1, player2.symbol)
 
-            console.log(boardItself.board)
-            _turn = 'player1'
+            if(boardItself.checkWinner(player2)){
+              renderHandler.renderWinnerModal(player2)
+              _gameEnd = true
+            } else if(boardItself.checkTie(_turnNumber)) {
+              renderHandler.renderWinnerModal(undefined)
+            }
+            else _turn = 'player1'
+            _turnNumber += 1
           }
       }
     }))
     //when the reset button is clicked
     resetBtn.addEventListener('click', () => {
       _turn = 'player1'
+      _gameEnd = false
+      _turnNumber = 0
       const _newSquares = []
       const _newReset = resetBtn.cloneNode(true)
       _squares.forEach(square => _newSquares.push(square.cloneNode(true)))
