@@ -82,7 +82,7 @@ main {
   border: transparent;
   border-radius: 4px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.1s;
   outline: none;
   margin-left: 2rem;
   margin-right: 2rem;
@@ -94,6 +94,7 @@ main {
 
 #buttonAI:hover {
   background: linear-gradient(45deg, rgb(95, 15, 15), rgb(233, 3, 3));
+  box-shadow: 0px 0px 8px rgb(231, 99, 99);
 }
 
 #buttonTwoPlayers {
@@ -101,7 +102,8 @@ main {
 }
 
 #buttonTwoPlayers:hover {
-  background: linear-gradient(45deg, rgb(19, 19, 78), rgb(28, 28, 202));
+  background: linear-gradient(45deg, rgb(20, 20, 75), rgb(49, 49, 241));
+  box-shadow: 0px 0px 8px rgb(108, 99, 231);
 }
 
 #resetBtnDiv {
@@ -111,11 +113,12 @@ main {
 #resetBtn {
   margin-top: 30px;
   background: linear-gradient(45deg, rgb(204, 2, 2), rgb(3, 3, 194));
-  transition: 0.3s;
+  transition: 0.1s;
 }
 
 #resetBtn:hover {
   background: linear-gradient(45deg, rgb(235, 7, 7), rgb(9, 9, 231));
+  box-shadow: 2px 0px 8px rgb(108, 99, 231), -2px 0px 8px rgb(231, 99, 99);
 }
 
 
