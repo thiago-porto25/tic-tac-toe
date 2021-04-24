@@ -125,7 +125,7 @@ const renderHandler = (function(){
     if(winner === undefined){
       _winnerText.textContent = 'It\'s a Tie!'
     } else {
-      _winnerText.textContent = `${winner.name} is the Winner!`
+      _winnerText.textContent = `${winner.name}\n is the Winner!`
     }
     setTimeout(closeWinnerModal, 4000)
   }
