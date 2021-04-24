@@ -82,6 +82,8 @@ const renderHandler = (function(){
   const modalTwoPlayers = _modalsContainer.querySelector('#modalTwoPlayers')
   const winnerModal = _modalsContainer.querySelector('#winnerModal')
   const _winnerText = winnerModal.querySelector('p')
+  const _closeAI = modalAI.querySelector('.close')
+  const _closeTwoPlayers = modalTwoPlayers.querySelector('.close')
   //selecting renderBoard
   const _gameBoard = document.querySelector('#gameBoard')
   const boardSquares = _gameBoard.querySelectorAll('.boardSquare')
@@ -154,7 +156,10 @@ const renderHandler = (function(){
 
   _buttonAI.addEventListener('click', _renderAIModal)
   _buttonTwoPlayers.addEventListener('click', _renderTwoPlayersModal)
+  _closeAI.addEventListener('click', closeAIModal)
+  _closeTwoPlayers.addEventListener('click', closeTwoPlayerModal)
   resetBtn.addEventListener('click', resetBoard)
+
 
   return {
     renderChooseMode,
