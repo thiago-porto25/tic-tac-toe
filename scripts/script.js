@@ -99,6 +99,12 @@ const renderHandler = (function () {
 
   const renderChooseMode = () => {
     _modeBtnsAndBoard.style.display = 'flex'
+    _buttonAI.style.display = ''
+    _buttonTwoPlayers.style.display = ''
+  }
+  const unrenderChooseMode = () => {
+    _buttonAI.style.display = 'none'
+    _buttonTwoPlayers.style.display = 'none'
   }
   const _renderAIModal = () => {
     _modalsContainer.style.display = 'flex'
@@ -120,7 +126,6 @@ const renderHandler = (function () {
     _unblurBackground()
     _modalsContainer.style.display = 'none'
     winnerModal.style.display = 'none'
-    changeResetText('New Game')
   }
   const renderWinnerModal = winner => {
     _blurBackground()
@@ -149,9 +154,8 @@ const renderHandler = (function () {
     _gameBoard.style.display = 'flex'
     boardSquares.forEach(square => square.setAttribute('class', mode))
     resetBoard()
-    renderResetButton()
-    closeAIModal()
-    closeTwoPlayerModal()
+    if (modalAI.style.display === 'flex') closeAIModal()
+    if (modalTwoPlayers.style.display === 'flex') closeTwoPlayerModal()
   }
 
   _buttonAI.addEventListener('click', _renderAIModal)
@@ -164,6 +168,9 @@ const renderHandler = (function () {
     renderWinnerModal,
     renderBoard,
     resetBoard,
+    closeAIModal,
+    closeTwoPlayerModal,
+    unrenderChooseMode,
     modalAI,
     modalTwoPlayers,
     winnerModal,
@@ -177,25 +184,26 @@ const gameBoardHandler = (function () {
   //selecting inputs and buttons from Two Players Modal
   const _player1NameInput = modalTwoPlayers.querySelector('#player1Name')
   const _player2NameInput = modalTwoPlayers.querySelector('#player2Name')
-  const _TwoGameSubmit = modalTwoPlayers.querySelector('.startTwoPlayersGame')
   //selecting inputs and buttons from AI Modal
   const _playerNameAIInput = modalAI.querySelector('#playerNameAI')
-  const _AIGameSubmit = modalAI.querySelector('.startAIGame')
   //selecting forms
   const formAI = document.querySelector('#formAI')
   const formTwoPlayers = document.querySelector('#formTwoPlayers')
+  //abort variable
+  let abortTwoPlayers = false
+  let abortAI = false
 
   const _randomSquare = () => {
     return Math.round(Math.random() * 8)
   }
-  const runGame = (player1, player2) => {
+  const runGameTwoPlayers = (player1, player2, _squares) => {
     let _turn = 'player1'
     let _gameEnd = false
     let _turnNumber = 0
 
     _squares.forEach(square => square.addEventListener('click', e => {
         if (_turn === 'player1') {
-          if (e.target.textContent === player1.symbol ||e.target.textContent === player2.symbol ||_gameEnd) return
+          if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
           else {
             e.target.textContent = player1.symbol
 
@@ -205,39 +213,19 @@ const gameBoardHandler = (function () {
             if (boardItself.checkWinner(player1)) {
               renderHandler.renderWinnerModal(player1)
               _gameEnd = true
+              renderHandler.renderChooseMode()
             } else if (boardItself.checkTie(_turnNumber)) {
               renderHandler.renderWinnerModal(undefined)
-            } else _turn = 'player2'
-            _turnNumber += 1
-            
-            if (player2.name === 'Computer') {
-              let _AIChoice
-              let _AISquare
-      
-              if (_gameEnd === true) return
-              else {
-                for (let i = 0; i < 9; i++) {
-                  _AIChoice = _randomSquare()
-                  _AISquare = document.querySelector(`[data-index = "${_AIChoice}"]`)
-                  if (_AISquare.textContent == '') break
-                }
-      
-                _AISquare.textContent = player2.symbol
-                boardItself.board.splice(_AIChoice, 1, player2.symbol)
-      
-                if (boardItself.checkWinner(player2)) {
-                  renderHandler.renderWinnerModal(player2)
-                  _gameEnd = true
-                } else if (boardItself.checkTie(_turnNumber)) {
-                  renderHandler.renderWinnerModal(undefined)
-                } else _turn = 'player1'
-                _turnNumber += 1
-              }
+              _gameEnd = true
+              renderHandler.renderChooseMode()
+            } else {
+              _turn = 'player2'
+              _turnNumber += 1
             }
+
           }
-        } else if (_turn === 'player2' && player2.name !== 'Computer') {
-          if (
-            e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
+        } else if (_turn === 'player2') {
+          if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
           else {
             e.target.textContent = player2.symbol
 
@@ -247,47 +235,115 @@ const gameBoardHandler = (function () {
             if (boardItself.checkWinner(player2)) {
               renderHandler.renderWinnerModal(player2)
               _gameEnd = true
+              renderHandler.renderChooseMode()
             } else if (boardItself.checkTie(_turnNumber)) {
               renderHandler.renderWinnerModal(undefined)
+              _gameEnd = true
+              renderHandler.renderChooseMode()
             } else _turn = 'player1'
             _turnNumber += 1
+          }
+        }
+    })
+    )
+  }
+  const runGameAI = (player1, player2, _squares) => {
+    let _turn = 'player1'
+    let _gameEnd = false
+    let _turnNumber = 0
+
+    _squares.forEach(square => square.addEventListener('click', e => {
+        if (_turn === 'player1') {
+          if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
+          else {
+            e.target.textContent = player1.symbol
+
+            const _squareIndex = e.target.getAttribute('data-index')
+            boardItself.board.splice(_squareIndex, 1, player1.symbol)
+
+            if (boardItself.checkWinner(player1)) {
+              renderHandler.renderWinnerModal(player1)
+              _gameEnd = true
+              renderHandler.renderChooseMode()
+            } else if (boardItself.checkTie(_turnNumber)) {
+              renderHandler.renderWinnerModal(undefined)
+              _gameEnd = true
+              renderHandler.renderChooseMode()
+            } else{
+              _turn = 'player2'
+              _turnNumber += 1
+            }
+          }
+        }
+        if (_turn === 'player2') {
+          let _AIChoice
+          let _AISquare
+
+          if (_gameEnd === true) return
+          else {
+            for (let i = 0; i < 9; i++) {
+              _AIChoice = _randomSquare()
+              _AISquare = document.querySelector(`[data-index = "${_AIChoice}"]`)
+              if (_AISquare.textContent == '') break
+            }
+
+            _AISquare.textContent = player2.symbol
+            boardItself.board.splice(_AIChoice, 1, player2.symbol)
+
+            if (boardItself.checkWinner(player2)) {
+              renderHandler.renderWinnerModal(player2)
+              _gameEnd = true
+              renderHandler.renderChooseMode()
+            } else if (boardItself.checkTie(_turnNumber)) {
+              renderHandler.renderWinnerModal(undefined)
+              _gameEnd = true
+              renderHandler.renderChooseMode()
+            } else {
+              _turn = 'player1'
+              _turnNumber += 1
+            }
           }
         }
       })
     )
   }
-  const submitAndStartAIGame = () => {
-    renderHandler.resetBoard()
-    const _playerName = _playerNameAIInput.value
-    const _AIName = 'Computer'
-    let _playerSymbol = 'X'
-    let _AISymbol = 'O'
 
+  const submitAndStartAIGame = (player, AI) => {
     renderHandler.renderBoard('boardSquare AIBoard')
+    const _squares = renderHandler.boardSquares
 
-    _playerNameAIInput.value = ''
+    if (player === undefined || AI === undefined) {
+      const _playerName = _playerNameAIInput.value
+      const _AIName = 'Computer'
+      let _playerSymbol = 'X'
+      let _AISymbol = 'O'
 
-    const player = playerFactory(_playerName, _playerSymbol)
-    const AI = playerFactory(_AIName, _AISymbol)
+      _playerNameAIInput.value = ''
 
-    runGame(player, AI)
+      player = playerFactory(_playerName, _playerSymbol)
+      AI = playerFactory(_AIName, _AISymbol)
+    }
+    renderHandler.unrenderChooseMode()
+    runGameAI(player, AI, _squares)
   }
-  const submitAndStartTwoPlayersGame = () => {
-    renderHandler.resetBoard()
-    const _player1Name = _player1NameInput.value
-    const _player2Name = _player2NameInput.value
-    const _player1Symbol = 'X'
-    const _player2Symbol = 'O'
-
+  const submitAndStartTwoPlayersGame = (player1, player2) => {
     renderHandler.renderBoard('boardSquare twoPlayersBoard')
+    const _squares = renderHandler.boardSquares
 
-    _player1NameInput.value = ''
-    _player2NameInput.value = ''
+    if (player1 === undefined || player2 === undefined) {
+      const _player1Name = _player1NameInput.value
+      const _player2Name = _player2NameInput.value
+      const _player1Symbol = 'X'
+      const _player2Symbol = 'O'
 
-    const player1 = playerFactory(_player1Name, _player1Symbol)
-    const player2 = playerFactory(_player2Name, _player2Symbol)
+      _player1NameInput.value = ''
+      _player2NameInput.value = ''
 
-    runGame(player1, player2)
+      player1 = playerFactory(_player1Name, _player1Symbol)
+      player2 = playerFactory(_player2Name, _player2Symbol)
+    }
+    renderHandler.unrenderChooseMode()
+    runGameTwoPlayers(player1, player2, _squares)
   }
   const _preventRefresh = event => {
     event.preventDefault()
@@ -295,6 +351,7 @@ const gameBoardHandler = (function () {
 
   formAI.addEventListener('submit', _preventRefresh)
   formAI.addEventListener('submit', submitAndStartAIGame)
+
   formTwoPlayers.addEventListener('submit', _preventRefresh)
   formTwoPlayers.addEventListener('submit', submitAndStartTwoPlayersGame)
 })()
