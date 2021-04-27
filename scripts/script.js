@@ -83,6 +83,8 @@ const renderHandler = (function () {
   const _modeBtnsAndBoard = document.querySelector('#modeBtnsAndBoard')
   const _buttonAI = _modeBtnsAndBoard.querySelector('#buttonAI')
   const _buttonTwoPlayers = _modeBtnsAndBoard.querySelector('#buttonTwoPlayers')
+  const _playAgainAI = _modeBtnsAndBoard.querySelector('#playAgainAI')
+  const _playAgainTwoPlayers = _modeBtnsAndBoard.querySelector('#playAgainTwoPlayers')
   const _footer = document.querySelector('footer')
   //selecting modals
   const _modalsContainer = document.querySelector('#modalsContainer')
@@ -97,6 +99,24 @@ const renderHandler = (function () {
   const boardSquares = _gameBoard.querySelectorAll('.boardSquare')
 
 
+  const renderPlayAgainAI = () => {
+    _playAgainAI.style.display = 'inline'
+  }
+  const renderPlayAgainTwoPlayers = () => {
+    _playAgainTwoPlayers.style.display = 'inline'
+  }
+  const unrenderPlayAgainAI = () => {
+    _playAgainAI.style.display = 'none'
+  }
+  const unrenderPlayAgainTwoPlayers = () => {
+    _playAgainTwoPlayers.style.display = 'none'
+  }
+  const renderButtonAI = () => {
+    _buttonAI.style.display = ''
+  }
+  const renderButtonTwoPlayers = () => {
+    _buttonTwoPlayers.style.display = ''
+  }
   const renderChooseMode = () => {
     _modeBtnsAndBoard.style.display = 'flex'
     _buttonAI.style.display = ''
@@ -171,6 +191,12 @@ const renderHandler = (function () {
     closeAIModal,
     closeTwoPlayerModal,
     unrenderChooseMode,
+    renderPlayAgainAI,
+    renderPlayAgainTwoPlayers,
+    unrenderPlayAgainAI,
+    unrenderPlayAgainTwoPlayers,
+    renderButtonAI,
+    renderButtonTwoPlayers,
     modalAI,
     modalTwoPlayers,
     winnerModal,
@@ -213,11 +239,13 @@ const gameBoardHandler = (function () {
             if (boardItself.checkWinner(player1)) {
               renderHandler.renderWinnerModal(player1)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonAI()
+              renderHandler.renderPlayAgainTwoPlayers()
             } else if (boardItself.checkTie(_turnNumber)) {
               renderHandler.renderWinnerModal(undefined)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonAI()
+              renderHandler.renderPlayAgainTwoPlayers()
             } else {
               _turn = 'player2'
               _turnNumber += 1
@@ -235,11 +263,13 @@ const gameBoardHandler = (function () {
             if (boardItself.checkWinner(player2)) {
               renderHandler.renderWinnerModal(player2)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonAI()
+              renderHandler.renderPlayAgainTwoPlayers()
             } else if (boardItself.checkTie(_turnNumber)) {
               renderHandler.renderWinnerModal(undefined)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonAI()
+              renderHandler.renderPlayAgainTwoPlayers()
             } else _turn = 'player1'
             _turnNumber += 1
           }
@@ -264,11 +294,13 @@ const gameBoardHandler = (function () {
             if (boardItself.checkWinner(player1)) {
               renderHandler.renderWinnerModal(player1)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonTwoPlayers()
+              renderHandler.renderPlayAgainAI()
             } else if (boardItself.checkTie(_turnNumber)) {
               renderHandler.renderWinnerModal(undefined)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonTwoPlayers()
+              renderHandler.renderPlayAgainAI()
             } else{
               _turn = 'player2'
               _turnNumber += 1
@@ -293,11 +325,13 @@ const gameBoardHandler = (function () {
             if (boardItself.checkWinner(player2)) {
               renderHandler.renderWinnerModal(player2)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonTwoPlayers()
+              renderHandler.renderPlayAgainAI()
             } else if (boardItself.checkTie(_turnNumber)) {
               renderHandler.renderWinnerModal(undefined)
               _gameEnd = true
-              renderHandler.renderChooseMode()
+              renderHandler.renderButtonTwoPlayers()
+              renderHandler.renderPlayAgainAI()
             } else {
               _turn = 'player1'
               _turnNumber += 1

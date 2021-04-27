@@ -112,6 +112,26 @@ main {
   box-shadow: 0px 0px 8px rgb(108, 99, 231);
 }
 
+#playAgainAI {
+  display: none;
+  background: linear-gradient(45deg, rgb(66, 0, 0), rgb(204, 2, 2));
+}
+
+#playAgainAI:hover {
+  background: linear-gradient(45deg, rgb(95, 15, 15), rgb(233, 3, 3));
+  box-shadow: 0px 0px 8px rgb(231, 99, 99);
+}
+
+#playAgainTwoPlayers {
+  display: none;
+  background: linear-gradient(45deg, rgb(0, 0, 56), rgb(3, 3, 194));
+}
+
+#playAgainTwoPlayers:hover {
+  background: linear-gradient(45deg, rgb(20, 20, 75), rgb(49, 49, 241));
+  box-shadow: 0px 0px 8px rgb(108, 99, 231);
+}
+
 
 /* Game Board */
 #gameBoard {
