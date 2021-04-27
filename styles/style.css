@@ -286,15 +286,16 @@ main {
 
 /*footer*/
 footer {
+  font-family: 'Lexand Deca', sans-serif;
   margin-left: 1rem;
-  color: rgb(156, 3, 3);
-  text-shadow: 1.5px 1px 0px rgb(2, 2, 173);
+  color: rgb(34, 34, 34);
   margin-top: -1rem;
+  font-style: italic;
 }
 
 footer p {
   margin-bottom: 0.5rem;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 footer a {
