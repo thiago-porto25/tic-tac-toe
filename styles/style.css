@@ -65,6 +65,10 @@ main {
   color: rgb(158, 1, 1);
   text-shadow: 5px 5px 0px rgb(2, 2, 173);
 }
+.title h1 {
+  margin-bottom: 2rem;
+  margin-top: 0.5rem;
+}
 
 .blurred {
   filter: blur(4px);
@@ -76,7 +80,7 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 15%;
+  height: 20%;
 }
 
 .modeBtns {
@@ -222,7 +226,7 @@ main {
 }
 
 .startGameBtn{
-  width: 7rem;
+  width: 7.5rem;
   height: 2.5rem;
   font-family: inherit;
   font-size: 10px;
