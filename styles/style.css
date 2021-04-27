@@ -288,14 +288,14 @@ main {
 footer {
   font-family: 'Lexand Deca', sans-serif;
   margin-left: 1rem;
-  color: rgb(34, 34, 34);
+  color: rgb(70, 31, 78);
   margin-top: -1rem;
   font-style: italic;
 }
 
 footer p {
   margin-bottom: 0.5rem;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 footer a {
