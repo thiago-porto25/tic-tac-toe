@@ -251,6 +251,8 @@ const gameLogic = (function(){
       renderHandler.renderChooseMode()
     }  
 
+    if(init.gameEnd === true) return
+    
     player2.makeMoveAI()
     if (boardItself.checkWinner(player2)) {
     renderHandler.renderWinnerModal(player2)
