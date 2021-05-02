@@ -21,7 +21,7 @@ class Player{
   makeMoveAI() {
     let _AIChoice
     let _AISquare
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 9; i++) {
       _AIChoice = this.randomSquare()
       _AISquare = document.querySelector(`[data-index = "${_AIChoice}"]`)
       if (_AISquare.textContent === '') break
@@ -50,6 +50,7 @@ const init = (function () {
 
 const boardItself = (function () {
   let board = ['', '', '', '', '', '', '', '', '']
+  let typeGame
   const resetBoard = () => {
     boardItself.board = ['', '', '', '', '', '', '', '', '']
   }
@@ -110,6 +111,7 @@ const boardItself = (function () {
     resetBoard,
     checkWinner,
     checkTie,
+    typeGame,
     board,
   }
 })()
@@ -285,6 +287,7 @@ const gameLogic = (function(){
 const gameBoardHandler = (function () {
   const modalAI = renderHandler.modalAI
   const modalTwoPlayers = renderHandler.modalTwoPlayers
+  const buttonReset = document.querySelector('#buttonReset')
   //selecting inputs and buttons from Two Players Modal
   const _player1NameInput = modalTwoPlayers.querySelector('#player1Name')
   const _player2NameInput = modalTwoPlayers.querySelector('#player2Name')
@@ -294,6 +297,12 @@ const gameBoardHandler = (function () {
   const formAI = document.querySelector('#formAI')
   const formTwoPlayers = document.querySelector('#formTwoPlayers')
 
+  const resetGame = () => {
+    renderHandler.resetBoard()
+    const _squares = renderHandler.createNewBoard()
+    gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)  
+  }
+
   const submitAndStartAIGame = () => {
     const _squares = renderHandler.createNewBoard()
     renderHandler.renderBoard('boardSquare AIBoard')
@@ -302,11 +311,12 @@ const gameBoardHandler = (function () {
     const _AIName = 'Computer'
     player1.changeName(_playerName)
     player2.changeName(_AIName)
+    boardItself.typeGame = 'Computer'
 
     _playerNameAIInput.value = ''
 
     renderHandler.unrenderChooseMode()
-    gameLogic.runGame(player1, player2, _squares, 'Computer')
+    gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)
   }
 
   const submitAndStartTwoPlayersGame = () => {
@@ -317,12 +327,13 @@ const gameBoardHandler = (function () {
     const _player2Name = _player2NameInput.value
     player1.changeName(_player1Name)
     player2.changeName(_player2Name)
+    boardItself.typeGame = 'Two Players'
 
     _player1NameInput.value = ''
     _player2NameInput.value = ''
 
     renderHandler.unrenderChooseMode()
-    gameLogic.runGame(player1, player2, _squares, 'Two Players')
+    gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)
   }
 
   const _preventRefresh = event => {
@@ -334,4 +345,6 @@ const gameBoardHandler = (function () {
 
   formTwoPlayers.addEventListener('submit', _preventRefresh)
   formTwoPlayers.addEventListener('submit', submitAndStartTwoPlayersGame)
+
+  buttonReset.addEventListener('click', resetGame)
 })()
