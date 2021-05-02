@@ -3,27 +3,29 @@ class Player{
     this.name = name
     this.symbol = symbol
   }
+
   changeName(newName){
     this.name = newName
   }
+
   makeMove(e, playerTurn){
     e.target.textContent = playerTurn.symbol
     const _squareIndex = e.target.getAttribute('data-index')
     boardItself.board.splice(_squareIndex, 1, playerTurn.symbol)
   }
+
   randomSquare() {
     return Math.round(Math.random() * 8)
   }
+
   makeMoveAI() {
     let _AIChoice
     let _AISquare
-
     for (let i = 0; i < 10; i++) {
       _AIChoice = this.randomSquare()
       _AISquare = document.querySelector(`[data-index = "${_AIChoice}"]`)
       if (_AISquare.textContent === '') break
     }
-
     _AISquare.textContent = player2.symbol
     boardItself.board.splice(_AIChoice, 1, player2.symbol)
   }
@@ -35,12 +37,15 @@ const player2 = new Player('player2', 'O')
 const init = (function () {
   const _initModal = document.querySelector('#init')
   const _newGameBtn = _initModal.querySelector('button')
+  let gameEnd = false
 
   const _removeInitModal = () => {
     _initModal.style.display = 'none'
     renderHandler.renderChooseMode()
   }
   _newGameBtn.addEventListener('click', _removeInitModal)
+
+  return { gameEnd }
 })()
 
 const boardItself = (function () {
@@ -124,11 +129,15 @@ const renderHandler = (function () {
   const _closeTwoPlayers = modalTwoPlayers.querySelector('.close')
   //selecting renderBoard
   let _gameBoard = document.querySelector('#gameBoard')
-  const boardSquares = _gameBoard.querySelectorAll('.boardSquare')
+  let boardSquares = _gameBoard.querySelectorAll('.boardSquare')
 
   const createNewBoard = () => {
     const newBoard = _gameBoard.cloneNode(true)
+    _modeBtnsAndBoard.removeChild(gameBoard)
+    _modeBtnsAndBoard.appendChild(newBoard)
     _gameBoard = newBoard
+    boardSquares = _gameBoard.querySelectorAll('.boardSquare')
+    return boardSquares
   }
   const renderChooseMode = () => {
     _modeBtnsAndBoard.style.display = 'flex'
@@ -218,11 +227,12 @@ const gameLogic = (function(){
 
     if (boardItself.checkWinner(playerTurn)) {
       renderHandler.renderWinnerModal(playerTurn)
-      _gameEnd = true
+      init.gameEnd = true
       renderHandler.renderChooseMode()
+      
     } else if (boardItself.checkTie(_turn)) {
       renderHandler.renderWinnerModal(undefined)
-      _gameEnd = true
+      init.gameEnd = true
       renderHandler.renderChooseMode()
     }
   }
@@ -231,29 +241,29 @@ const gameLogic = (function(){
     player1.makeMove(e, player1)
     if (boardItself.checkWinner(player1)) {
       renderHandler.renderWinnerModal(player1)
-      runGame._gameEnd = true
+      init.gameEnd = true
       renderHandler.renderChooseMode()
     } else if (boardItself.checkTie(_turn)) {
       renderHandler.renderWinnerModal(undefined)
-      runGame._gameEnd = true
+      init.gameEnd = true
       renderHandler.renderChooseMode()
     }  
 
     player2.makeMoveAI()
     if (boardItself.checkWinner(player2)) {
     renderHandler.renderWinnerModal(player2)
-    runGame._gameEnd = true
+    init.gameEnd = true
     renderHandler.renderChooseMode()
     }   
   }
 
   const runGame = (player1, player2, _squares, typeGame) => {
     let playerTurn = player1
-    let _gameEnd = false
+    init.gameEnd = false
     let _turn = 0
 
     _squares.forEach(square => square.addEventListener('click', e => {
-      if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || _gameEnd) return
+      if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || init.gameEnd) return
       if(typeGame === 'Two Players') {
         TwoPlayersGame(e, playerTurn, _turn)
 
@@ -285,9 +295,8 @@ const gameBoardHandler = (function () {
   const formTwoPlayers = document.querySelector('#formTwoPlayers')
 
   const submitAndStartAIGame = () => {
-    
+    const _squares = renderHandler.createNewBoard()
     renderHandler.renderBoard('boardSquare AIBoard')
-    const _squares = renderHandler.boardSquares
 
     const _playerName = _playerNameAIInput.value
     const _AIName = 'Computer'
@@ -301,9 +310,8 @@ const gameBoardHandler = (function () {
   }
 
   const submitAndStartTwoPlayersGame = () => {
-  
+    const _squares = renderHandler.createNewBoard()
     renderHandler.renderBoard('boardSquare twoPlayersBoard')
-    const _squares = renderHandler.boardSquares
 
     const _player1Name = _player1NameInput.value
     const _player2Name = _player2NameInput.value
