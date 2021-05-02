@@ -120,6 +120,7 @@ const renderHandler = (function () {
   const _modeBtnsAndBoard = document.querySelector('#modeBtnsAndBoard')
   const _buttonAI = _modeBtnsAndBoard.querySelector('#buttonAI')
   const _buttonTwoPlayers = _modeBtnsAndBoard.querySelector('#buttonTwoPlayers')
+  const _buttonReset = _modeBtnsAndBoard.querySelector('#buttonReset')
   const _footer = document.querySelector('footer')
   //selecting modals
   const _modalsContainer = document.querySelector('#modalsContainer')
@@ -141,14 +142,13 @@ const renderHandler = (function () {
     boardSquares = _gameBoard.querySelectorAll('.boardSquare')
     return boardSquares
   }
+  const renderResetBtn = () => {
+    _buttonReset.style.display = 'inline'
+  }
   const renderChooseMode = () => {
     _modeBtnsAndBoard.style.display = 'flex'
     _buttonAI.style.display = ''
     _buttonTwoPlayers.style.display = ''
-  }
-  const unrenderChooseMode = () => {
-    _buttonAI.style.display = 'none'
-    _buttonTwoPlayers.style.display = 'none'
   }
   const _renderAIModal = () => {
     _modalsContainer.style.display = 'flex'
@@ -198,6 +198,7 @@ const renderHandler = (function () {
     _gameBoard.style.display = 'flex'
     boardSquares.forEach(square => square.setAttribute('class', mode))
     resetBoard()
+    renderResetBtn()
     if (modalAI.style.display === 'flex') closeAIModal()
     if (modalTwoPlayers.style.display === 'flex') closeTwoPlayerModal()
   }
@@ -215,7 +216,6 @@ const renderHandler = (function () {
     resetBoard,
     closeAIModal,
     closeTwoPlayerModal,
-    unrenderChooseMode,
     modalAI,
     modalTwoPlayers,
     winnerModal,
@@ -315,7 +315,6 @@ const gameBoardHandler = (function () {
 
     _playerNameAIInput.value = ''
 
-    renderHandler.unrenderChooseMode()
     gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)
   }
 
@@ -332,7 +331,6 @@ const gameBoardHandler = (function () {
     _player1NameInput.value = ''
     _player2NameInput.value = ''
 
-    renderHandler.unrenderChooseMode()
     gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)
   }
 
