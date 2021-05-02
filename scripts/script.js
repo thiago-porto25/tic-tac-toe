@@ -151,6 +151,9 @@ const renderHandler = (function () {
     _buttonAI.style.display = ''
     _buttonTwoPlayers.style.display = ''
   }
+  const unrenderModeBtnsAndBoard = () => {
+    _modeBtnsAndBoard.style.display = 'none'
+  }
   const _renderAIModal = () => {
     _modalsContainer.style.display = 'flex'
     modalAI.style.display = 'flex'
@@ -217,6 +220,7 @@ const renderHandler = (function () {
     resetBoard,
     closeAIModal,
     closeTwoPlayerModal,
+    unrenderModeBtnsAndBoard,
     modalAI,
     modalTwoPlayers,
     winnerModal,
@@ -227,7 +231,7 @@ const renderHandler = (function () {
 const gameLogic = (function(){
   const TwoPlayersGame = (e, playerTurn) => {
     playerTurn.makeMove(e, playerTurn)
-
+    ++init.turn
     if (boardItself.checkWinner(playerTurn)) {
       renderHandler.renderWinnerModal(playerTurn)
       init.gameEnd = true
@@ -277,7 +281,6 @@ const gameLogic = (function(){
         TwoPlayersGame(e, playerTurn)
         if(playerTurn === player1) playerTurn = player2 
         else if(playerTurn === player2) playerTurn = player1
-        ++init.turn
       } else if(typeGame === 'Computer'){
         AIGame(e)
       }
@@ -309,6 +312,8 @@ const gameBoardHandler = (function () {
 
   const submitAndStartAIGame = () => {
     const _squares = renderHandler.createNewBoard()
+    renderHandler.unrenderModeBtnsAndBoard()
+    renderHandler.renderChooseMode()
     renderHandler.renderBoard('boardSquare AIBoard')
 
     const _playerName = _playerNameAIInput.value
@@ -324,6 +329,8 @@ const gameBoardHandler = (function () {
 
   const submitAndStartTwoPlayersGame = () => {
     const _squares = renderHandler.createNewBoard()
+    renderHandler.unrenderModeBtnsAndBoard()
+    renderHandler.renderChooseMode()
     renderHandler.renderBoard('boardSquare twoPlayersBoard')
 
     const _player1Name = _player1NameInput.value

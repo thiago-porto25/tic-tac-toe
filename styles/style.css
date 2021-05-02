@@ -21,6 +21,10 @@ main {
   justify-content: center;
   align-items: center;
   height: 100%;
+  -webkit-animation-name: animate;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animate;
+  animation-duration: 0.4s;
 }
 
 #init h1 {
@@ -58,6 +62,10 @@ main {
   justify-content: center;
   align-items: center;
   height: 100%;
+  -webkit-animation-name: animate;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animate;
+  animation-duration: 0.4s;
 }
 
 .title {
@@ -100,6 +108,7 @@ main {
   outline: none;
   margin-left: 2rem;
   margin-right: 2rem;
+  transition: 0.5s ease;
 }
 
 #buttonReset {
@@ -139,6 +148,10 @@ main {
   align-items: center;
   justify-content: center;
   width: 400px;
+  -webkit-animation-name: animate;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animate;
+  animation-duration: 0.4s;
 }
 
 .boardSquare {
@@ -190,6 +203,10 @@ main {
   min-height: 18rem;
   border-radius: 8px;
   position: relative;
+  -webkit-animation-name: animate;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animate;
+  animation-duration: 0.4s;
 }
 
 #modalAI {
@@ -282,7 +299,10 @@ main {
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.027);
-  transition: 0.5s ease;
+  -webkit-animation-name: animate;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animate;
+  animation-duration: 0.4s;
 }
 
 #winnerModal p {
@@ -331,4 +351,24 @@ footer a {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* animations */
+@-webkit-keyframes animate {
+  from {
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animate {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
