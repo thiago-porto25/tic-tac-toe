@@ -38,6 +38,7 @@ const init = (function () {
   const _initModal = document.querySelector('#init')
   const _newGameBtn = _initModal.querySelector('button')
   let gameEnd = false
+  let turn = 0
 
   const _removeInitModal = () => {
     _initModal.style.display = 'none'
@@ -45,7 +46,7 @@ const init = (function () {
   }
   _newGameBtn.addEventListener('click', _removeInitModal)
 
-  return { gameEnd }
+  return { gameEnd, turn }
 })()
 
 const boardItself = (function () {
@@ -105,7 +106,7 @@ const boardItself = (function () {
       return true
   }
   const checkTie = turns => {
-    if (turns === 8) return true
+    if (turns > 8) return true
   }
   return {
     resetBoard,
@@ -224,7 +225,7 @@ const renderHandler = (function () {
 })()
 
 const gameLogic = (function(){
-  const TwoPlayersGame = (e, playerTurn, _turn) => {
+  const TwoPlayersGame = (e, playerTurn) => {
     playerTurn.makeMove(e, playerTurn)
 
     if (boardItself.checkWinner(playerTurn)) {
@@ -232,20 +233,22 @@ const gameLogic = (function(){
       init.gameEnd = true
       renderHandler.renderChooseMode()
       
-    } else if (boardItself.checkTie(_turn)) {
+    } else if (boardItself.checkTie(init.turn)) {
       renderHandler.renderWinnerModal(undefined)
       init.gameEnd = true
       renderHandler.renderChooseMode()
     }
   }
 
-  const AIGame = (e, _turn) => {
+  const AIGame = (e) => {
     player1.makeMove(e, player1)
+    ++init.turn
     if (boardItself.checkWinner(player1)) {
       renderHandler.renderWinnerModal(player1)
       init.gameEnd = true
       renderHandler.renderChooseMode()
-    } else if (boardItself.checkTie(_turn)) {
+
+    } else if (boardItself.checkTie(init.turn)) {
       renderHandler.renderWinnerModal(undefined)
       init.gameEnd = true
       renderHandler.renderChooseMode()
@@ -254,6 +257,7 @@ const gameLogic = (function(){
     if(init.gameEnd === true) return
     
     player2.makeMoveAI()
+    ++init.turn
     if (boardItself.checkWinner(player2)) {
     renderHandler.renderWinnerModal(player2)
     init.gameEnd = true
@@ -264,20 +268,18 @@ const gameLogic = (function(){
   const runGame = (player1, player2, _squares, typeGame) => {
     let playerTurn = player1
     init.gameEnd = false
-    let _turn = 0
+    init.turn = 0
 
     _squares.forEach(square => square.addEventListener('click', e => {
       if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || init.gameEnd) return
-      if(typeGame === 'Two Players') {
-        TwoPlayersGame(e, playerTurn, _turn)
 
+      if(typeGame === 'Two Players') {
+        TwoPlayersGame(e, playerTurn)
         if(playerTurn === player1) playerTurn = player2 
         else if(playerTurn === player2) playerTurn = player1
-
-        _turn++
+        ++init.turn
       } else if(typeGame === 'Computer'){
-        AIGame(e, playerTurn, _turn)
-        _turn++
+        AIGame(e)
       }
     }))
   }
