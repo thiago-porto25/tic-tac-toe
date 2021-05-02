@@ -83,6 +83,10 @@ main {
   height: 20%;
 }
 
+#gameModeBtnsDiv div {
+  display: flex;
+}
+
 .modeBtns {
   width: 8rem;
   height: 3rem;
@@ -96,6 +100,15 @@ main {
   outline: none;
   margin-left: 2rem;
   margin-right: 2rem;
+}
+
+#buttonReset {
+  background: linear-gradient(45deg, rgb(3, 3, 194), rgb(204, 2, 2));
+}
+
+#buttonReset:hover {
+  background: linear-gradient(45deg, rgb(49, 49, 241), rgb(233, 3, 3));
+  box-shadow: 2px 0px 8px rgb(108, 99, 231), -2px 0px 8px rgb(231, 99, 99);
 }
 
 #buttonAI {
