@@ -1,14 +1,14 @@
-class Player{
-  constructor(name, symbol){
+class Player {
+  constructor(name, symbol) {
     this.name = name
     this.symbol = symbol
   }
 
-  changeName(newName){
+  changeName(newName) {
     this.name = newName
   }
 
-  makeMove(e, playerTurn){
+  makeMove(e, playerTurn) {
     e.target.textContent = playerTurn.symbol
     const _squareIndex = e.target.getAttribute('data-index')
     boardItself.board.splice(_squareIndex, 1, playerTurn.symbol)
@@ -21,7 +21,7 @@ class Player{
   makeMoveAI() {
     let _AIChoice
     let _AISquare
-    for (let i = 0; i < 9; i++) {
+    while (true) {
       _AIChoice = this.randomSquare()
       _AISquare = document.querySelector(`[data-index = "${_AIChoice}"]`)
       if (_AISquare.textContent === '') break
@@ -55,7 +55,7 @@ const boardItself = (function () {
   const resetBoard = () => {
     boardItself.board = ['', '', '', '', '', '', '', '', '']
   }
-  const checkWinner = player => {
+  const checkWinner = (player) => {
     if (
       boardItself.board[0] === player.symbol &&
       boardItself.board[3] === player.symbol &&
@@ -105,7 +105,7 @@ const boardItself = (function () {
     )
       return true
   }
-  const checkTie = turns => {
+  const checkTie = (turns) => {
     if (turns > 8) return true
   }
   return {
@@ -175,7 +175,7 @@ const renderHandler = (function () {
     _modalsContainer.style.display = 'none'
     winnerModal.style.display = 'none'
   }
-  const renderWinnerModal = winner => {
+  const renderWinnerModal = (winner) => {
     _blurBackground()
     _modalsContainer.style.display = 'flex'
     winnerModal.style.display = 'flex'
@@ -195,12 +195,12 @@ const renderHandler = (function () {
     modalTwoPlayers.style.display = 'none'
   }
   const resetBoard = () => {
-    boardSquares.forEach(square => (square.textContent = ''))
+    boardSquares.forEach((square) => (square.textContent = ''))
     boardItself.resetBoard()
   }
-  const renderBoard = mode => {
+  const renderBoard = (mode) => {
     _gameBoard.style.display = 'flex'
-    boardSquares.forEach(square => square.setAttribute('class', mode))
+    boardSquares.forEach((square) => square.setAttribute('class', mode))
     resetBoard()
     renderResetBtn()
     if (modalAI.style.display === 'flex') closeAIModal()
@@ -228,7 +228,7 @@ const renderHandler = (function () {
   }
 })()
 
-const gameLogic = (function(){
+const gameLogic = (function () {
   const TwoPlayersGame = (e, playerTurn) => {
     playerTurn.makeMove(e, playerTurn)
     ++init.turn
@@ -236,7 +236,6 @@ const gameLogic = (function(){
       renderHandler.renderWinnerModal(playerTurn)
       init.gameEnd = true
       renderHandler.renderChooseMode()
-      
     } else if (boardItself.checkTie(init.turn)) {
       renderHandler.renderWinnerModal(undefined)
       init.gameEnd = true
@@ -251,22 +250,21 @@ const gameLogic = (function(){
       renderHandler.renderWinnerModal(player1)
       init.gameEnd = true
       renderHandler.renderChooseMode()
-
     } else if (boardItself.checkTie(init.turn)) {
       renderHandler.renderWinnerModal(undefined)
       init.gameEnd = true
       renderHandler.renderChooseMode()
-    }  
+    }
 
-    if(init.gameEnd === true) return
-    
+    if (init.gameEnd === true) return
+
     player2.makeMoveAI()
     ++init.turn
     if (boardItself.checkWinner(player2)) {
-    renderHandler.renderWinnerModal(player2)
-    init.gameEnd = true
-    renderHandler.renderChooseMode()
-    }   
+      renderHandler.renderWinnerModal(player2)
+      init.gameEnd = true
+      renderHandler.renderChooseMode()
+    }
   }
 
   const runGame = (player1, player2, _squares, typeGame) => {
@@ -274,20 +272,27 @@ const gameLogic = (function(){
     init.gameEnd = false
     init.turn = 0
 
-    _squares.forEach(square => square.addEventListener('click', e => {
-      if (e.target.textContent === player1.symbol || e.target.textContent === player2.symbol || init.gameEnd) return
+    _squares.forEach((square) =>
+      square.addEventListener('click', (e) => {
+        if (
+          e.target.textContent === player1.symbol ||
+          e.target.textContent === player2.symbol ||
+          init.gameEnd
+        )
+          return
 
-      if(typeGame === 'Two Players') {
-        TwoPlayersGame(e, playerTurn)
-        if(playerTurn === player1) playerTurn = player2 
-        else if(playerTurn === player2) playerTurn = player1
-      } else if(typeGame === 'Computer'){
-        AIGame(e)
-      }
-    }))
+        if (typeGame === 'Two Players') {
+          TwoPlayersGame(e, playerTurn)
+          if (playerTurn === player1) playerTurn = player2
+          else if (playerTurn === player2) playerTurn = player1
+        } else if (typeGame === 'Computer') {
+          AIGame(e)
+        }
+      })
+    )
   }
   return {
-    runGame
+    runGame,
   }
 })()
 
@@ -307,7 +312,7 @@ const gameBoardHandler = (function () {
   const resetGame = () => {
     renderHandler.resetBoard()
     const _squares = renderHandler.createNewBoard()
-    gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)  
+    gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)
   }
 
   const submitAndStartAIGame = () => {
@@ -345,7 +350,7 @@ const gameBoardHandler = (function () {
     gameLogic.runGame(player1, player2, _squares, boardItself.typeGame)
   }
 
-  const _preventRefresh = event => {
+  const _preventRefresh = (event) => {
     event.preventDefault()
   }
 
